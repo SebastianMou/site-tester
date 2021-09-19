@@ -30,7 +30,9 @@
                                     <option value="">4</option>
                                 </select>
                             </div>
-                            <div class="col-6 text-end"><button type="button" class="btn btn-secondary btn-sm">Add to basket</button></div>
+                            <div class="col-6 text-end">
+                                <button type="button" id="add-button" value="{{ product.id }}" class="btn btn-secondary btn-sm">Add to basket</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,6 +41,31 @@
     </main>
 
 </div>
+
+<!--
+    AJAX is a technique for creating fast and dynamic web pages. AJAX allows web pages to be updated asynchronously by exchanging small amounts of data with the
+    server behind the scenes. This means that it is possible to update parts of a web page, without reloading the whole page.
+-->
+
+<script>
+    $(document).on('click', '#add-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "basket:basket_add" %}',
+            data: {
+                productid: $('#add-button').val(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action: 'post'
+            },
+            success: function (json) {
+
+            },
+            error: function (xhr, errmsg, err) {}
+        });
+    })
+</script>
+
 {% endblock %}
 
 
