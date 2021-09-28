@@ -21,15 +21,17 @@
                     </div>
                     <div class="col">
                         <div class="row p-3">
-                            <div class="col-6">
+                            <!--
+                                <div class="col-6">
                                 <label for="select">Qty</label>
                                 <select id="select">
-                                    <option value="">1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                 </select>
                             </div>
+                            -->
                             <div class="col-6 text-end">
                                 <button type="button" id="add-button" value="{{ product.id }}" class="btn btn-secondary btn-sm">Add to basket</button>
                             </div>
@@ -48,18 +50,20 @@
 -->
 
 <script>
-    $(document).on('click', '#add-button', function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: '{% url "basket:basket_add" %}',
-            data: {
-                productid: $('#add-button').val(),
-                csrfmiddlewaretoken: "{{csrf_token}}",
-                action: 'post'
+    $(document).on('click', '#add-button', function (e) {        // referencing that someone has clicked on the id add-button
+        e.preventDefault();                                      // funcion the dosnent maki it fire off
+        $.ajax({                                                 // ajax send and return data
+            type: 'POST',                                        // type of data - POST
+            url: '{% url "basket:basket_add" %}',                // send data to - basket:basket_add
+            data: {                                              // data that get's sent
+                productid: $('#add-button').val(),               // send data #add-button
+                productqty: $('#select option:selected').text(), //send product quantity
+                csrfmiddlewaretoken: "{{csrf_token}}",           // send token
+                action: 'post'                             
             },
-            success: function (json) {
-
+            success: function (json) {                           // exeption
+                document.getElementById("basket-qty").innerHTML = json.qty
+                
             },
             error: function (xhr, errmsg, err) {}
         });
